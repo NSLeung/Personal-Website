@@ -5,8 +5,18 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* background-color: #000;  */
+  background-image: url('kde_plasma_icecold2.png');
+
 }
 
+#root { 
+  margin: 50px auto; 
+  width: 630px; 
+  height: 450px; 
+}
+input:focus { outline: none; }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

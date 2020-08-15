@@ -4,9 +4,14 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+
+// const theme = "Terminal.Themes.DARK";
+
 ReactDOM.render(
   <React.StrictMode>
     <App />
+
+
   </React.StrictMode>,
   document.getElementById('root')
 );
