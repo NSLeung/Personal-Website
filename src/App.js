@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import Terminal from "react-bash";
 import TextField from "@material-ui/core/TextField";
@@ -11,9 +10,6 @@ import Typography from "@material-ui/core/Typography";
 import Fade from "@material-ui/core/Fade";
 import Grid from "@material-ui/core/Grid";
 import { Box } from "@material-ui/core";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Paper from "@material-ui/core/Paper";
 import Avatar from "@material-ui/core/Avatar";
 import profileIcon from "./profile_icon-Copy.PNG";
 import IconButton from "@material-ui/core/IconButton";
@@ -55,6 +51,10 @@ const extensions = {
 
 const history = [
   { value: "Hackers will be high-fived. ( ‘-’)人(ﾟ_ﾟ )" },
+  {
+    value:
+      "Welcome to the terminal! This is how you'll get around the website...",
+  },
   { value: "Type `help` to begin" },
 ];
 
@@ -95,7 +95,6 @@ function App() {
   const [showTransition, setTransition] = React.useState(true);
   const [curTimeLong, setCurTimeLong] = React.useState();
   const [curDate, setCurDate] = React.useState();
-  const [selectedTab, setSelectedTab] = React.useState(0);
   const [loggedIn, setLogIn] = React.useState(false);
 
   const handleClose = () => {
@@ -118,14 +117,9 @@ function App() {
     let dateStr = new Date().toLocaleDateString("en-US", options);
     let timeStr = new Date().toLocaleString("en-US");
     let time = timeStr.slice(timeStr.indexOf(",") + 1);
-    // setCurTimeLong(new Date().toLocaleString("en-US"));
     setCurTimeLong(time);
     setCurDate(dateStr);
   }, 1000);
-
-  const handleTabChange = (event, value) => {
-    setSelectedTab(value);
-  };
 
   function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -231,9 +225,8 @@ function App() {
         history={history}
         structure={structure}
         extensions={extensions}
-        // theme={theme}
         theme={Terminal.Themes.DARK}
-        prefix="hello there"
+        prefix="NSLeung-Website"
       />
     </>
   );
