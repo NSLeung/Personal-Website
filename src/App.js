@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 import Terminal from "react-bash";
 import TextField from "@material-ui/core/TextField";
@@ -91,11 +91,11 @@ const structure = {
 };
 function App() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-  const [showTransition, setTransition] = React.useState(true);
-  const [curTimeLong, setCurTimeLong] = React.useState();
-  const [curDate, setCurDate] = React.useState();
-  const [loggedIn, setLogIn] = React.useState(false);
+  const [open, setOpen] = useState(true);
+  const [showTransition, setTransition] = useState(true);
+  const [curTimeLong, setCurTimeLong] = useState();
+  const [curDate, setCurDate] = useState();
+  const [loggedIn, setLogIn] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
@@ -104,10 +104,9 @@ function App() {
   //   setOpen(!open);
   // };
 
-  setTimeout(() => {
-    setTransition(false);
-  }, 5000);
-  setInterval(() => {
+  const clockUpdateID = useRef(null);
+
+  const clockUpdate = () => {
     let options = {
       weekday: "long",
       year: "numeric",
@@ -119,7 +118,26 @@ function App() {
     let time = timeStr.slice(timeStr.indexOf(",") + 1);
     setCurTimeLong(time);
     setCurDate(dateStr);
-  }, 1000);
+    if (!loggedIn) {
+      clockUpdateID.current = setTimeout(clockUpdate, 1000);
+    }
+  };
+  useEffect(() => {
+    setTimeout(() => {
+      setTransition(false);
+    }, 5000);
+  });
+
+  useEffect(() => {
+    if (!loggedIn) {
+      clockUpdate();
+    }
+    return () => clearTimeout(clockUpdateID.current);
+  }, [loggedIn]);
+
+  const handleLogIn = () => {
+    setLogIn(true);
+  };
 
   function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -187,11 +205,7 @@ function App() {
                         endAdornment: (
                           <InputAdornment position="end">
                             <IconButton>
-                              <ExitToAppIcon
-                                onClick={() => {
-                                  setLogIn(true);
-                                }}
-                              />
+                              <ExitToAppIcon onClick={handleLogIn} />
                             </IconButton>
                           </InputAdornment>
                         ),
@@ -225,7 +239,7 @@ function App() {
         history={history}
         structure={structure}
         extensions={extensions}
-        theme={Terminal.Themes.DARK}
+        theme={Terminal.Themes.SOLARIZED}
         prefix="NSLeung-Website"
       />
     </>
