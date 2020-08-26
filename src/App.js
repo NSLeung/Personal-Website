@@ -12,7 +12,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Typography from '@material-ui/core/Typography';
 import Fade from '@material-ui/core/Fade';
 import Grid from '@material-ui/core/Grid';
-import { Box } from '@material-ui/core';
+import { Box, Tooltip } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -21,9 +21,19 @@ import MuiAlert from '@material-ui/lab/Alert';
 import profileIcon from './profile_icon-Copy.PNG';
 import Terminal from './react-bash-local';
 
-import AboutMe from './components/aboutMe';
+import { title as aboutMeTitle, texts as aboutMeTexts } from './content/aboutMe';
+import { title as rssTitle, texts as rssTexts } from './content/projects/redditSavedScraper';
+
+import DisplayModal from './components/displayModal';
+
 /* backdrop stuff */
 const useStyles = makeStyles((theme) => ({
+    parentContainer: {
+        /* copied over from index.css */
+        margin: '50px auto',
+        width: 630,
+        height: 450,
+    },
     root: {
         textAlign: 'center',
     },
@@ -78,19 +88,27 @@ const structure = {
         },
         '.secrets': { content: "I'm still afraid of the dark..." },
     },
+    'AboutMe.md': {
+        type: 'custom',
+        content: 'Hey! Use the view [filename] command to look at this special file.',
+    },
     public: {
-        file0: {
-            type: 'custom',
-        },
         file1: {
             content:
-        'The is the content for file1 in the <public> directory for you to play around with.',
+        'Sandbox file! Just here for you to play around with :D',
         },
     },
-    'README.md': {
-        content:
-      "✌⊂(✰‿✰)つ✌ Thanks for checking out the tool! There is a lot that you can do with react-bash and I'm excited to see all of the fun commands and projects build on top of it!",
+    projects: {
+        'redditSavedScraper.md': {
+            type: 'custom',
+            content: 'Hey! Use the view [filename] command to look at this special file.',
+        },
     },
+};
+
+const displayArr = {
+    aboutme: { title: aboutMeTitle, texts: aboutMeTexts },
+    redditsavedscraper: { title: rssTitle, texts: rssTexts },
 };
 function App() {
     const classes = useStyles();
@@ -99,6 +117,7 @@ function App() {
     const [curTimeLong, setCurTimeLong] = useState();
     const [curDate, setCurDate] = useState();
     const [loggedIn, setLogIn] = useState(false);
+    const [fileKey, setFileKey] = useState();
 
     const openApp = useRef(false);
 
@@ -133,10 +152,6 @@ function App() {
         return () => clearTimeout(clockUpdateID.current);
     }, [loggedIn]);
 
-    useEffect(() => {
-        console.log('openApp changed?!');
-    }, [openApp]);
-
     const handleLogIn = () => {
         setLogIn(true);
         setOpen(false);
@@ -152,12 +167,12 @@ function App() {
     };
 
     const handleUpdateOpen = (filename) => {
-        console.log(filename);
         openApp.current.updateOpenApp();
+        setFileKey(filename.substring(0, filename.indexOf('.')).toLowerCase());
     };
 
     return (
-        <>
+        <Box className={classes.parentContainer}>
             {!loggedIn && (
                 <Backdrop className={classes.backdrop} open={open}>
                     <Grid
@@ -213,9 +228,12 @@ function App() {
                                                 ),
                                                 endAdornment: (
                                                     <InputAdornment position="end">
-                                                        <IconButton>
-                                                            <ExitToAppIcon onClick={handleLogIn} />
-                                                        </IconButton>
+                                                        <Tooltip title="Login">
+                                                            <IconButton>
+                                                                <ExitToAppIcon onClick={handleLogIn} />
+                                                            </IconButton>
+                                                        </Tooltip>
+
                                                     </InputAdornment>
                                                 ),
                                             }}
@@ -233,8 +251,7 @@ function App() {
                     </Grid>
                     {!showTransition && (
                         <Snackbar
-                            open={!showTransition}
-                            onClose={handleCloseAlert}
+                            open
                             autoHideDuration={6000}
                         >
                             <Alert onClose={handleCloseAlert} severity="success">
@@ -248,15 +265,16 @@ function App() {
                 history={history}
                 structure={structure}
                 extensions={extensions}
-                theme={Terminal.Themes.SOLARIZED}
+                theme={Terminal.Themes.DARK}
                 prefix="user@NSLeung-Website"
                 openAppHandler={handleUpdateOpen}
             />
-            <AboutMe
-                // openApp={openApp}
+            <DisplayModal
                 passedInRef={openApp}
+                texts={fileKey ? displayArr[fileKey].texts : []}
+                title={fileKey ? displayArr[fileKey].title : []}
             />
-        </>
+        </Box>
     );
 }
 

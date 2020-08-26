@@ -51,21 +51,17 @@ const DialogContent = withStyles((theme) => ({
 }))(MuiDialogContent);
 
 const DisplayModal = ({
-    // openApp, displayModalCB, title, text,
-    passedInRef, title, text,
+    passedInRef, title, texts,
 }) => {
     //   const [open, setOpen] = React.useState(false);
     const [openApp, setOpenApp] = React.useState(false);
-    //   const handleClickOpen = () => {
-    //     setOpen(true);
-    //   };
     const handleClose = () => {
-        // displayModalCB(false);
         setOpenApp(false);
     };
     useImperativeHandle(passedInRef, () => {
         return {
             updateOpenApp: () => {
+                console.log('opening app!');
                 setOpenApp(true);
             },
         };
@@ -73,9 +69,6 @@ const DisplayModal = ({
 
     return (
         <div>
-            {/* <Button variant='outlined' color='primary' onClick={handleClickOpen}>
-        Open dialog
-      </Button> */}
             <Dialog
                 onClose={handleClose}
                 aria-labelledby="customized-dialog-title"
@@ -85,7 +78,11 @@ const DisplayModal = ({
                     {title}
                 </DialogTitle>
                 <DialogContent dividers>
-                    <Typography gutterBottom>{text}</Typography>
+                    {texts.map((text, id) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <Typography gutterBottom key={id}>{text}</Typography>
+
+                    ))}
                 </DialogContent>
             </Dialog>
         </div>
