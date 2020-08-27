@@ -6,7 +6,7 @@ import React, {
 import './App.css';
 import TextField from '@material-ui/core/TextField';
 import Backdrop from '@material-ui/core/Backdrop';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Typography from '@material-ui/core/Typography';
@@ -15,17 +15,46 @@ import Grid from '@material-ui/core/Grid';
 import { Box, Tooltip } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import Dialog from '@material-ui/core/Dialog';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import CloseIcon from '@material-ui/icons/Close';
 import profileIcon from './profile_icon-Copy.PNG';
 import Terminal from './react-bash-local';
-
-import { title as aboutMeTitle, texts as aboutMeTexts } from './content/aboutMe';
-import { title as rssTitle, texts as rssTexts } from './content/projects/redditSavedScraper';
-
 import DisplayModal from './components/displayModal';
+import Paper from '@material-ui/core/Paper';
+import Draggable from 'react-draggable';
 
+/* dialog styling */
+const styles = (theme) => ({
+    root: {
+        margin: 0,
+        padding: theme.spacing(2),
+    },
+    closeButton: {
+        padding: 0,
+        // position: 'absolute',
+        alignItems: 'flex-end',
+        right: theme.spacing(1),
+        // top: theme.spacing(1),
+        color: theme.palette.grey[500],
+    },
+
+});
+
+/* dialog draggability */
+function PaperComponent(props) {
+    return (
+        <Draggable handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'}>
+            <Paper {...props} />
+        </Draggable>
+    );
+}
 /* backdrop stuff */
 const useStyles = makeStyles((theme) => ({
     parentContainer: {
@@ -43,11 +72,27 @@ const useStyles = makeStyles((theme) => ({
     },
     styledInput: {
         background: 'white',
-    // color: "white",
+        // color: "white",
     },
     largeAvatar: {
         width: theme.spacing(20),
         height: theme.spacing(20),
+    },
+    terminalDialog: {
+        padding: 0,
+        borderRadius: 0,
+    },
+    dialogTitle: {
+        backgroundColor: '#535554',
+        padding: 0,
+        alignContent: 'flex-end',
+    },
+    dialogPaper: {
+        // minHeight: '70vh',
+        margin: '50px auto',
+        width: 630,
+        height: 450,
+        padding: 0,
     },
 }));
 /* terminal stuff */
@@ -68,7 +113,7 @@ const extensions = {
 const history = [
     {
         value:
-      "Welcome to the terminal! This is how you'll get around the website...",
+            "Welcome to the terminal! This is how you'll get around the website...",
     },
     { value: 'Type `help` to begin' },
 ];
@@ -92,10 +137,10 @@ const structure = {
         type: 'custom',
         content: 'Hey! Use the view [filename] command to look at this special file.',
     },
-    public: {
+    'playground-dir': {
         file1: {
             content:
-        'Sandbox file! Just here for you to play around with :D',
+                'Sandbox file! Just here for you to play around with :D',
         },
     },
     projects: {
@@ -106,10 +151,32 @@ const structure = {
     },
 };
 
-const displayArr = {
-    aboutme: { title: aboutMeTitle, texts: aboutMeTexts },
-    redditsavedscraper: { title: rssTitle, texts: rssTexts },
-};
+/* Dialog stuff */
+const DialogTitle = withStyles(styles)((props) => {
+    const {
+        classes, onClose, ...other
+    } = props;
+    return (
+        <MuiDialogTitle disableTypography className={classes.dialogTitle} {...other}>
+            {onClose ? (
+                <Button
+                    aria-label="close"
+                    className={classes.closeButton}
+                    onClick={onClose}
+                >
+                    <CloseIcon />
+                </Button>
+            ) : null}
+        </MuiDialogTitle>
+    );
+});
+
+const DialogContent = withStyles((theme) => ({
+    root: {
+        // padding: theme.spacing(2),
+    },
+}))(MuiDialogContent);
+
 function App() {
     const classes = useStyles();
     const [open, setOpen] = useState(true);
@@ -117,9 +184,11 @@ function App() {
     const [curTimeLong, setCurTimeLong] = useState();
     const [curDate, setCurDate] = useState();
     const [loggedIn, setLogIn] = useState(false);
-    const [fileKey, setFileKey] = useState();
-
+    const [openTerminal, setOpenTerminal] = useState(true);
+    // const [fileKey, setFileKey] = useState();
+    // let fileKey = '';
     const openApp = useRef(false);
+    const fileKey = useRef('');
 
     const clockUpdateID = useRef(null);
 
@@ -167,12 +236,21 @@ function App() {
     };
 
     const handleUpdateOpen = (filename) => {
+
+        // fileKey = filename.substring(0, filename.indexOf('.')).toLowerCase();
         openApp.current.updateOpenApp();
-        setFileKey(filename.substring(0, filename.indexOf('.')).toLowerCase());
+        // fileKey.current = filename.substring(0, filename.indexOf('.')).toLowerCase();
+        // setFileKey(filename.substring(0, filename.indexOf('.')).toLowerCase());
+        fileKey.current.updateFileKey(filename.substring(0, filename.indexOf('.')).toLowerCase());
+    };
+
+    const handleClose = () => {
+        setOpenTerminal(false);
     };
 
     return (
-        <Box className={classes.parentContainer}>
+        <>
+         {/* <Box className={classes.parentContainer}> */}
             {!loggedIn && (
                 <Backdrop className={classes.backdrop} open={open}>
                     <Grid
@@ -255,26 +333,45 @@ function App() {
                             autoHideDuration={6000}
                         >
                             <Alert onClose={handleCloseAlert} severity="success">
-                                Click Login to continue!
+                                Click Login to continue! (No password required)
                             </Alert>
                         </Snackbar>
                     )}
                 </Backdrop>
             )}
-            <Terminal
-                history={history}
-                structure={structure}
-                extensions={extensions}
-                theme={Terminal.Themes.DARK}
-                prefix="user@NSLeung-Website"
-                openAppHandler={handleUpdateOpen}
-            />
-            <DisplayModal
-                passedInRef={openApp}
-                texts={fileKey ? displayArr[fileKey].texts : []}
-                title={fileKey ? displayArr[fileKey].title : []}
-            />
-        </Box>
+            {loggedIn
+                    && openTerminal && (
+                <Dialog
+                    fullWidth
+                    open
+                    hideBackdrop
+                    PaperComponent={PaperComponent}
+                    className={classes.dialogPaper}
+                    fullScreen
+                >
+                    <DialogTitle classes={classes} onClose={handleClose} style={{ cursor: 'move' }} id="draggable-dialog-title" />
+                    <DialogContent dividers className={classes.terminalDialog} borderRadius={0}>
+                        <Terminal
+                            history={history}
+                            structure={structure}
+                            extensions={extensions}
+                            theme={Terminal.Themes.DARK}
+                            prefix="user@NSLeung-Website"
+                            openAppHandler={handleUpdateOpen}
+                        />
+                    </DialogContent>
+
+                </Dialog>
+            )}
+
+            {fileKey !== undefined && (
+                <DisplayModal
+                    openAppRef={openApp}
+                    fileKeyRef={fileKey}
+                />
+            )}
+        {/* </Box> */}
+        </>
     );
 }
 
