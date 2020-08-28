@@ -10,8 +10,9 @@ import terminal from '../iconfinder_terminal_resized.svg';
 import OpenInBrowserIcon from '@material-ui/icons/OpenInBrowser';
 import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 import NestedMenuItem from 'material-ui-nested-menu-item';
+import DescriptionIcon from '@material-ui/icons/Description';
 import { Menu, MenuItem } from "@material-ui/core";
-
+import Resume from '../content/Resume_NaymanLeung.pdf';
 
 const useStyles = makeStyles(() => ({
 
@@ -58,16 +59,18 @@ const Dock = ({openAppHandler, openTerminalHandler, openTerminal}) => {
     const handleItemClick = () => {
         setMenuPosition(null);
     };
-    const handleAboutMe = () => {
-        openAppHandler('aboutme.md');
+    const handleAboutMe = (filename) => {
+        setMenuPosition(null);
+        openAppHandler(filename);
     };
     return (
         <Box className={classes.BottomNav}>
-            <Button 
-            variant="contained" 
-            className={classes.iconButtonStyle}
-            onClick={handleMenuClick}
-            >
+            <Tooltip title="Menu">
+                <Button 
+                variant="contained" 
+                className={classes.iconButtonStyle}
+                onClick={handleMenuClick}
+                >
                     <MenuOpenIcon variant="outlined" style={{ fontSize: 60 }} />
                     <Menu
                         open={!!menuPosition}
@@ -75,16 +78,24 @@ const Dock = ({openAppHandler, openTerminalHandler, openTerminal}) => {
                         anchorReference="anchorPosition"
                         anchorPosition={menuPosition}
                     >
-                        <MenuItem onClick={handleAboutMe}>About Me</MenuItem>
+                        <MenuItem onClick={() => handleAboutMe('aboutme.md')}>About Me</MenuItem>
                         <NestedMenuItem
                             label="Projects"
                             parentMenuOpen={!!menuPosition}
                             onClick={handleItemClick}
                         >
-                            <MenuItem onClick={handleItemClick}>Reddit Saved Scraper</MenuItem>
+                            <MenuItem onClick={() => handleAboutMe('redditsavedscraper.md')}>Reddit Saved Scraper</MenuItem>
                         </NestedMenuItem>
                     </Menu>
-            </Button>
+                </Button>
+            </Tooltip>
+            <a href={Resume} target="_blank">
+                <Tooltip title="Resume">
+                    <Button variant="contained" className={classes.iconButtonStyle}>
+                        <DescriptionIcon variant="outlined" style={{ fontSize: 60 }} />
+                    </Button>
+                </Tooltip>
+            </a>
             <a href="https://github.com/NSLeung" target="_blank" rel="noopener noreferrer">
                 <Tooltip title="GitHub">
                     <Button variant="contained" className={classes.iconButtonStyle}>

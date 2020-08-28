@@ -114,7 +114,7 @@ const extensions = {
 const history = [
     {
         value:
-            "Welcome to the terminal! This is how you'll get around the website...",
+            "Welcome to the terminal! You can get around the website if you like Bash (or use the menu dropdown in the dock below!)",
     },
     { value: 'Type `help` to begin' },
 ];
@@ -212,7 +212,7 @@ function App() {
     useEffect(() => {
         setTimeout(() => {
             setTransition(false);
-        }, 3000);
+        }, 5000);
     });
 
     useEffect(() => {
@@ -263,15 +263,21 @@ function App() {
                     >
                         <Grid item xs={12}>
                             <Fade in={showTransition}>
-                                <Typography variant="h3" component="h2">
-                                    Welcome to Nayman's Website!
-                                </Typography>
+                                <Box>
+                                    <Typography variant="h3" component="h2">
+                                        Welcome to Nayman's Website
+                                    </Typography>
+                                    <Typography variant="h6" component="h6">
+                                        A tribute to the KDE Linux Plasma Desktop Environment
+                                    </Typography>
+                                </Box>
+                               
                             </Fade>
                             {!showTransition && (
                                 <Fade in={!showTransition}>
                                     <>
                                         <Box textAlign="center">
-                                            <Typography variant="h3" component="h2">
+                                            <Typography variant="h2" component="h2">
                                                 {curTimeLong}
                                             </Typography>
                                             <br />
@@ -306,7 +312,7 @@ function App() {
                                                     </InputAdornment>
                                                 ),
                                                 endAdornment: (
-                                                    <InputAdornment position="end">
+                                                    <InputAdornment position="end" class='blob'>
                                                         <Tooltip title="Login">
                                                             <IconButton>
                                                                 <ExitToAppIcon onClick={handleLogIn} />
@@ -367,6 +373,7 @@ function App() {
 
             {fileKey !== undefined && (
                 <DisplayModal
+                    loggedIn={loggedIn}
                     openAppRef={openApp}
                     fileKeyRef={fileKey}
                 />

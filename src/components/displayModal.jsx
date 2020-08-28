@@ -13,6 +13,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import { title as aboutMeTitle, texts as aboutMeTexts } from '../content/aboutMe';
 import { title as rssTitle, texts as rssTexts } from '../content/projects/redditSavedScraper';
+import Draggable from 'react-draggable';
+import Paper from '@material-ui/core/Paper';
+
 
 const styles = (theme) => ({
     root: {
@@ -26,6 +29,15 @@ const styles = (theme) => ({
         color: theme.palette.grey[500],
     },
 });
+
+/* dialog draggability */
+function PaperComponent(props) {
+    return (
+        <Draggable handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'}>
+            <Paper {...props} />
+        </Draggable>
+    );
+}
 
 const DialogTitle = withStyles(styles)((props) => {
     const {
@@ -59,11 +71,11 @@ const displayArr = {
 };
 
 const DisplayModal = ({
-    openAppRef, fileKeyRef,
+    loggedIn, openAppRef, fileKeyRef,
 }) => {
     //   const [open, setOpen] = React.useState(false);
-    const [openApp, setOpenApp] = useState(false);
-    const [fileKey, setFileKey] = useState('');
+    const [openApp, setOpenApp] = useState(true);
+    const [fileKey, setFileKey] = useState('aboutme');
     const handleClose = () => {
         setOpenApp(false);
     };
@@ -89,10 +101,11 @@ const DisplayModal = ({
             <Dialog
                 onClose={handleClose}
                 aria-labelledby="customized-dialog-title"
-                open={openApp}
+                open={openApp && loggedIn}
                 hideBackdrop
+                PaperComponent={PaperComponent}
             >
-                <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+                <DialogTitle onClose={handleClose} style={{ cursor: 'move' }} id="draggable-dialog-title">
                     {fileKey ? displayArr[fileKey].title : ''}
                 </DialogTitle>
                 <DialogContent dividers>
