@@ -80,6 +80,7 @@ const DialogContent = withStyles((theme) => ({
 const displayArr = {
     aboutme: { title: aboutMeTitle, texts: aboutMeTexts },
     dormdash: { title: ddTitle, texts: ddTexts },
+    timemanagement: { title: tmTitle, texts: tmTexts },
     classscraper: { title: classScraperTitle, texts: classScraperTexts },
     redditsavedscraper: { title: rssTitle, texts: rssTexts },
     riscvcore: { title: riscvTitle, texts: riscvTexts },
