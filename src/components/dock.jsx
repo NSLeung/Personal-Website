@@ -85,7 +85,7 @@ const Dock = ({openAppHandler, openTerminalHandler, openTerminal}) => {
                             onClick={handleItemClick}
                         >
                             <MenuItem onClick={() => handleAboutMe('dormDash.md')}>COVID19 Dininghall Queueing WebApp</MenuItem>
-                            <MenuItem onClick={() => handleAboutMe('timeMangement.md')}>Time Management Visualization</MenuItem>
+                            <MenuItem onClick={() => handleAboutMe('timeManagement.md')}>Time Management Visualization</MenuItem>
                             <MenuItem onClick={() => handleAboutMe('classScraper.md')}>Class Resources Scraper</MenuItem>
                             <MenuItem onClick={() => handleAboutMe('redditsavedscraper.md')}>Reddit Saved Scraper</MenuItem>
                             <MenuItem onClick={() => handleAboutMe('riscvcore.md')}>Pipelined RISCV Processor with L2 Caches</MenuItem>
