@@ -8,7 +8,7 @@ import Dock from './components/dock';
 ReactDOM.render(
     <React.StrictMode>
         <App />
-        <Dock />
+        {/* <Dock /> */}
     </React.StrictMode>,
     document.getElementById('root'),
 );

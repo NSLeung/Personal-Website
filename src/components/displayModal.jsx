@@ -78,6 +78,7 @@ const DisplayModal = ({
     useImperativeHandle(fileKeyRef, () => {
         return {
             updateFileKey: (filename) => {
+                console.log(filename);
                 setFileKey(filename);
             },
         };

@@ -29,6 +29,7 @@ import Terminal from './react-bash-local';
 import DisplayModal from './components/displayModal';
 import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
+import Dock from './components/dock';
 
 /* dialog styling */
 const styles = (theme) => ({
@@ -236,15 +237,15 @@ function App() {
     };
 
     const handleUpdateOpen = (filename) => {
-
-        // fileKey = filename.substring(0, filename.indexOf('.')).toLowerCase();
         openApp.current.updateOpenApp();
-        // fileKey.current = filename.substring(0, filename.indexOf('.')).toLowerCase();
-        // setFileKey(filename.substring(0, filename.indexOf('.')).toLowerCase());
         fileKey.current.updateFileKey(filename.substring(0, filename.indexOf('.')).toLowerCase());
     };
 
-    const handleClose = () => {
+    const handleOpenTerminal = () => {
+        setOpenTerminal(true);
+    };
+
+    const handleCloseTerminal = () => {
         setOpenTerminal(false);
     };
 
@@ -340,16 +341,16 @@ function App() {
                 </Backdrop>
             )}
             {loggedIn
-                    && openTerminal && (
+                     && (
                 <Dialog
                     fullWidth
-                    open
+                    open={openTerminal}
                     hideBackdrop
                     PaperComponent={PaperComponent}
                     className={classes.dialogPaper}
                     fullScreen
                 >
-                    <DialogTitle classes={classes} onClose={handleClose} style={{ cursor: 'move' }} id="draggable-dialog-title" />
+                    <DialogTitle classes={classes} onClose={handleCloseTerminal} style={{ cursor: 'move' }} id="draggable-dialog-title" />
                     <DialogContent dividers className={classes.terminalDialog} borderRadius={0}>
                         <Terminal
                             history={history}
@@ -370,6 +371,7 @@ function App() {
                     fileKeyRef={fileKey}
                 />
             )}
+            <Dock openAppHandler={handleUpdateOpen} openTerminalHandler={handleOpenTerminal} openTerminal={openTerminal} />
         {/* </Box> */}
         </>
     );
