@@ -84,7 +84,16 @@ const Dock = ({openAppHandler, openTerminalHandler, openTerminal}) => {
                             parentMenuOpen={!!menuPosition}
                             onClick={handleItemClick}
                         >
+                            <MenuItem onClick={() => handleAboutMe('dormDash.md')}>COVID19 Dininghall Queueing WebApp</MenuItem>
+                            <MenuItem onClick={() => handleAboutMe('timeMangement.md')}>Time Management Visualization</MenuItem>
+                            <MenuItem onClick={() => handleAboutMe('classScraper.md')}>Class Resources Scraper</MenuItem>
                             <MenuItem onClick={() => handleAboutMe('redditsavedscraper.md')}>Reddit Saved Scraper</MenuItem>
+                            <MenuItem onClick={() => handleAboutMe('riscvcore.md')}>Pipelined RISCV Processor with L2 Caches</MenuItem>
+                            <MenuItem onClick={() => handleAboutMe('pacmanFPGA.md')}>PacMan on VGA Display (FPGA SoC)</MenuItem>
+                            <MenuItem onClick={() => handleAboutMe('vumeter.md')}>VUMeter</MenuItem>
+                            <MenuItem onClick={() => handleAboutMe('calorieCounter.md')}>Calorie Counter WebApp</MenuItem>
+
+
                         </NestedMenuItem>
                     </Menu>
                 </Button>

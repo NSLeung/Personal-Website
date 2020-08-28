@@ -145,7 +145,35 @@ const structure = {
         },
     },
     projects: {
+        'dormDash.md': {
+            type: 'custom',
+            content: 'Hey! Use the view [filename] command to look at this special file.',
+        },
+        'timeManagement.md': {
+            type: 'custom',
+            content: 'Hey! Use the view [filename] command to look at this special file.',
+        },
+        'classScraper.md': {
+            type: 'custom',
+            content: 'Hey! Use the view [filename] command to look at this special file.',
+        },
         'redditSavedScraper.md': {
+            type: 'custom',
+            content: 'Hey! Use the view [filename] command to look at this special file.',
+        },
+        'riscvcore.md': {
+            type: 'custom',
+            content: 'Hey! Use the view [filename] command to look at this special file.',
+        },
+        'pacmanFPGA.md': {
+            type: 'custom',
+            content: 'Hey! Use the view [filename] command to look at this special file.',
+        },
+        'VUMeter.md': {
+            type: 'custom',
+            content: 'Hey! Use the view [filename] command to look at this special file.',
+        },
+        'calorieCounter.md': {
             type: 'custom',
             content: 'Hey! Use the view [filename] command to look at this special file.',
         },
